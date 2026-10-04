@@ -68,8 +68,6 @@ final class AndroidFlutterLocationButton extends FlutterLocationButtonPlatform
   void newLocalizations(ButtonLocalization newLocalizations) {
     _curLocalization = newLocalizations;
     _localizationStreamController.add(newLocalizations);
-
-    print('Got new localizations: $newLocalizations');
   }
 
   Future<void> registerWith() async {
