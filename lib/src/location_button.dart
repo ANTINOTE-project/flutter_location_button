@@ -30,7 +30,13 @@ extension _StyleToRaw on LocationButtonStyle {
   );
 }
 
+/// Callback used to tell the creator of the widget the necessary permissions
+/// were granted to fetch the user's location.
 typedef PermissionGrantedCallback = void Function(bool onlyGrantedForSession);
+
+/// Callback used to ask for the broader location permissions when the user taps
+/// a locally-rendered button.
+typedef PermissionAskCallback = Future<bool> Function();
 
 final _logger = Logger("LocationButton");
 
@@ -79,6 +85,10 @@ class const LocationButton({
   /// If the user already had permanently denied the permission, they won't get
   /// any system prompt and this will directly get called.
   final VoidCallback? onPermissionDenied,
+
+  /// Called when non-null and replaces default behavior: asks for location on
+  /// Android and errors on other platforms.
+  final PermissionAskCallback? askForBroaderPermission,
 
   /// Defines what button to render explicitly. When
   /// [NativeRenderingStrategy.never], the locally-rendered button is always
@@ -252,6 +262,7 @@ class _LocationButtonState extends State<LocationButton> with RouteAware {
 
             onPermissionGranted: widget.onPermissionGranted,
             onPermissionDenied: widget.onPermissionDenied,
+            askForBroaderPermission: widget.askForBroaderPermission,
           );
         }
 
@@ -275,10 +286,14 @@ class const _UnsupportedLocationButton({
 
   required final PermissionGrantedCallback onPermissionGranted,
   required final VoidCallback? onPermissionDenied,
+  required final PermissionAskCallback? askForBroaderPermission,
 }) extends StatelessWidget {
   void onPressed() async {
-    final result = await FlutterLocationButtonPlatform.instance
-        .askForBroaderPermission(sessionHandle);
+    final result = askForBroaderPermission != null
+        ? await askForBroaderPermission!()
+        : await FlutterLocationButtonPlatform.instance.askForBroaderPermission(
+            sessionHandle,
+          );
 
     if (result) {
       onPermissionGranted(false);

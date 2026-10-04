@@ -24,10 +24,15 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   pigeon: ^29.0.4
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+# Support is of course better on Android but the button locally renders on all platforms.
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
 
-# The following section is specific to Flutter packages.
 flutter:
   plugin:
     platforms:
