@@ -42,6 +42,13 @@ class _AppState extends State<App> {
       textType: .usePreciseLocation,
       width: 300,
     );
+    final smallStyle = LocationButtonStyle.outline(
+      context,
+      width: 48,
+      textType: .none,
+      size: .small,
+      shape: .round,
+    );
 
     return MaterialApp(
       home: Scaffold(
@@ -53,18 +60,37 @@ class _AppState extends State<App> {
                 SizedBox(height: 500, width: double.infinity),
 
                 Text('Locally rendered:'),
-                LocationButton(
-                  style: style,
-                  onPermissionGranted: onPermissionGranted,
-                  onPermissionDenied: onPermissionDenied,
-                  renderingStrategy: .never,
+                Row(
+                  children: [
+                    LocationButton(
+                      style: style,
+                      onPermissionGranted: onPermissionGranted,
+                      onPermissionDenied: onPermissionDenied,
+                      renderingStrategy: .never,
+                    ),
+                    LocationButton(
+                      style: smallStyle,
+                      onPermissionGranted: onPermissionGranted,
+                      onPermissionDenied: onPermissionDenied,
+                      renderingStrategy: .never,
+                    ),
+                  ],
                 ),
 
                 Text('Natively rendered (when safe):'),
-                LocationButton(
-                  style: style,
-                  onPermissionGranted: onPermissionGranted,
-                  onPermissionDenied: onPermissionDenied,
+                Row(
+                  children: [
+                    LocationButton(
+                      style: style,
+                      onPermissionGranted: onPermissionGranted,
+                      onPermissionDenied: onPermissionDenied,
+                    ),
+                    LocationButton(
+                      style: smallStyle,
+                      onPermissionGranted: onPermissionGranted,
+                      onPermissionDenied: onPermissionDenied,
+                    ),
+                  ],
                 ),
 
                 SizedBox(height: 8),

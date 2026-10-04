@@ -276,8 +276,57 @@ class const _UnsupportedLocationButton({
   required final PermissionGrantedCallback onPermissionGranted,
   required final VoidCallback? onPermissionDenied,
 }) extends StatelessWidget {
+  void onPressed() async {
+    final result = await FlutterLocationButtonPlatform.instance
+        .askForBroaderPermission(sessionHandle);
+
+    if (result) {
+      onPermissionGranted(false);
+    } else {
+      onPermissionDenied?.call();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final icon = Icon(
+      Symbols.my_location,
+      color: style.iconTintColor,
+      fontWeight: .bold,
+      size: 20,
+    );
+    final buttonStyle = ButtonStyle(
+      fixedSize: .all(
+        Size(
+          style.width - style.padding.horizontal,
+          style.height - style.padding.vertical,
+        ),
+      ),
+      padding: .all(style.padding),
+      elevation: .all(0),
+      backgroundColor: .all(style.backgroundColor),
+      overlayColor: .all(style.textColor?.withAlpha(20)),
+      iconColor: .all(style.iconTintColor),
+      shape: .fromMap({
+        WidgetState.pressed: RoundedRectangleBorder(
+          side: .new(
+            width: style.strokeWidth,
+            color: style.strokeColor ?? Color(0xFF000000),
+            style: style.strokeWidth == 0 ? .none : .solid,
+          ),
+          borderRadius: .circular(style.pressedCornerRadius),
+        ),
+        WidgetState.any: RoundedRectangleBorder(
+          side: .new(
+            width: style.strokeWidth,
+            color: style.strokeColor ?? Color(0xFF000000),
+            style: style.strokeWidth == 0 ? .none : .solid,
+          ),
+          borderRadius: .circular(style.cornerRadius),
+        ),
+      }),
+    );
+
     return StreamBuilder(
       stream: FlutterLocationButtonPlatform.instance.localizationStream,
       initialData: FlutterLocationButtonPlatform.instance.localization,
@@ -286,59 +335,21 @@ class const _UnsupportedLocationButton({
           height: style.height,
           width: style.width,
           padding: style.padding,
-          child: FilledButton.icon(
-            onPressed: () async {
-              final result = await FlutterLocationButtonPlatform.instance
-                  .askForBroaderPermission(sessionHandle);
-
-              if (result) {
-                onPermissionGranted(false);
-              } else {
-                onPermissionDenied?.call();
-              }
-            },
-            icon: Icon(
-              Symbols.my_location,
-              color: style.iconTintColor,
-              fontWeight: .bold,
-              size: 20,
-            ),
-            style: .new(
-              fixedSize: .all(
-                Size(
-                  style.width - style.padding.horizontal,
-                  style.height - style.padding.vertical,
-                ),
-              ),
-              padding: .all(style.padding),
-              elevation: .all(0),
-              backgroundColor: .all(style.backgroundColor),
-              overlayColor: .all(style.textColor?.withAlpha(20)),
-              iconColor: .all(style.iconTintColor),
-              shape: .fromMap({
-                WidgetState.pressed: RoundedRectangleBorder(
-                  side: .new(
-                    width: style.strokeWidth,
-                    color: style.strokeColor ?? Color(0xFF000000),
-                    style: style.strokeWidth == 0 ? .none : .solid,
+          child: style.textType == .none
+              ? IconButton.outlined(
+                  onPressed: onPressed,
+                  icon: icon,
+                  style: buttonStyle,
+                )
+              : FilledButton.icon(
+                  onPressed: onPressed,
+                  icon: icon,
+                  style: buttonStyle,
+                  label: Text(
+                    snapshot.data?[style.textType] ?? '',
+                    style: .new(color: style.textColor),
                   ),
-                  borderRadius: .circular(style.pressedCornerRadius),
                 ),
-                WidgetState.any: RoundedRectangleBorder(
-                  side: .new(
-                    width: style.strokeWidth,
-                    color: style.strokeColor ?? Color(0xFF000000),
-                    style: style.strokeWidth == 0 ? .none : .solid,
-                  ),
-                  borderRadius: .circular(style.cornerRadius),
-                ),
-              }),
-            ),
-            label: Text(
-              snapshot.data?[style.textType] ?? '',
-              style: .new(color: style.textColor),
-            ),
-          ),
         );
       },
     );
