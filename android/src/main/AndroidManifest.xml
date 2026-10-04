@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="fr.antinote.flutter_location_button">
+
+    <uses-permission
+        android:name="android.permission.USE_LOCATION_BUTTON"
+        android:minSdkVersion="37" />
+</manifest>
