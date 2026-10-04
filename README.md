@@ -11,9 +11,9 @@ This button is preferred for user privacy and is easier to justify when publishi
 [Play Store](https://support.google.com/googleplay/android-developer/answer/16909972#location-permissions)
 (or other stores with similar policies).
 
-We are agnostic regarding which geolocation method you use
+We are agnostic regarding which geolocation solution you use
 ([`geolocator`](https://pub.dev/packages/geolocator),
-[`location`](https://pub.dev/packages/location), or another solution), you won't have to update
+[`location`](https://pub.dev/packages/location), or another one), you won't have to update
 legacy code when migrating to this library, and you will use mature and familiar APIs.
 
 ## Getting Started
@@ -59,7 +59,7 @@ location:
 Again, the second permission is very important, find more information
 [here](https://developer.android.com/develop/sensors-and-location/location/permissions/runtime#approximate-request).
 
-> [!INFORMATION]
+> [!NOTE]
 > The value of the Location Button is diminished as you will need to declare the same permissions in
 > the manifest as if you didn't implement it, excepted the Location Button permission itself.
 
