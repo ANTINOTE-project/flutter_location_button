@@ -94,7 +94,7 @@ To use the widget, follow the instructions:
     LocationButton(
       // Alternatively, use the named factories for LocationButtonStyle to match aesthetics 
       // for different Material widget themes.
-      style: LocationButtonStyle(
+      style: .new(
         // Context is required to translate flutter Logical Pixels to Android Display Units.
         context: context,
         height: 48,
